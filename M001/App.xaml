@@ -1,0 +1,13 @@
+﻿<Application x:Class="M001.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:M001"
+             StartupUri="MainWindow.xaml"
+			 Startup="Application_Startup"
+			 Exit="Application_Exit">
+	<!--Hier das Startfenster der Applikation festlegen-->
+	<!--Hier kann auch Code ausgeführt werden, der vor oder nach der UI stattfinden soll-->
+    <Application.Resources> <!--Globale Resourcen (z.B. Styles, statische Resourcen) festlegen-->
+         
+    </Application.Resources>
+</Application>
