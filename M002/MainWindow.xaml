@@ -19,6 +19,14 @@
 			<Button.Content> <!--Content öffnen um komplexen Content einzubauen-->
 				<Image Source="C:\Users\lk3\source\repos\WPF_2023_11_02\M002\ppedv-Logo.png" Height="50" Stretch="Fill"/>
 			</Button.Content>
+			<Button.Background>
+				<LinearGradientBrush>
+					<LinearGradientBrush.GradientStops>
+						<GradientStop Color="Aqua" Offset="0"></GradientStop>
+						<GradientStop Color="Green" Offset="1"></GradientStop>
+					</LinearGradientBrush.GradientStops>
+				</LinearGradientBrush>
+			</Button.Background>
 		</Button>
 
 		<Button>
