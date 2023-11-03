@@ -1,0 +1,128 @@
+﻿<Window x:Class="M004.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:M004"
+        xmlns:conv="clr-namespace:M004.Converter"
+        mc:Ignorable="d"
+        Title="MainWindow"
+		Height="450"
+		Width="800"
+		WindowStartupLocation="CenterScreen">
+    <StackPanel>
+		<!--Bindings-->
+		<!--Ermöglichen das Verbinden von einem Property an ein anderes Property-->
+		<!--i.d.R. ein Property im Code Behind mit einem Property einer UI Komponente-->
+		<!--Es können auch zwei UI Komponente gebunden werden-->
+		<!--Wenn sich das eine Property ändert, ändert sich das andere auch-->
+		
+		<!--Zwei Möglichkeiten: DependencyProperty, INotifyPropertyChanged-->
+		<!--Bindings müssen am Ziel definiert werden-->
+		
+		<!--DependencyProperty-->
+		<!--Wrapper um ein Property-->
+		<!--Generell haben UI Komponenten Dependency Properties und diese können gebunden werden-->
+
+		<!--Zwei Möglichkeiten um ein Binding zu definieren-->
+		<!--Binding Tag (eigenes Binding Element)-->
+		<!--Markup Extension (direktes Einbinden in das Attribut)-->
+		<TextBlock FontSize="40">
+			<TextBlock.Text>
+				<Binding Path="Zaehler"/> <!--Zaehler wird nicht gebunden-->
+			
+				<!--DataContext-->
+				<!--DataContext beschreibt, wo die Daten herkommen die hier gebunden werden sollen-->
+				<!--Der DataContext kann im Code Behind gesetzt werden oder im XAML direkt-->
+			</TextBlock.Text>
+		</TextBlock>
+
+		<Slider ValueChanged="Slider_ValueChanged"/>
+		<!--Slider -> Zaehler Property -> TextBlock.Text-->
+
+		<!--Direkte Bindung zwischen UI Elementen-->
+		<TextBlock FontSize="40">
+			<TextBlock.Text>
+				<!--Hier muss jetzt der Slider als ElementName angegeben werden, und danach das Property das von dem Slider ausgelesen werden soll (Value)-->
+				<Binding ElementName="BindingSlider" Path="Value" Mode="TwoWay" FallbackValue="-1" UpdateSourceTrigger="PropertyChanged"/>
+				<!--Binding Mode-->
+				<!--Gibt die Richtung der Bindings an-->
+				<!--Standard TwoWay: Wenn sich das eine ändert, ändert sich das andere auch-->
+				<!--OneWay: Wenn sich das eine ändert, ändert sich das andere auch aber nicht umgekehrt-->
+				<!--OneWayToSource: Wenn sich das Ziel ändert, ändert sich die Quelle-->
+				
+				<!--UpdateSourceTrigger-->
+				<!--Hier kann definiert werden, wann das Update statt findet-->
+				<!--Standard PropertyChanged: Ändert sich immer, wenn die Quelle sich ändert (Achtung Performance)-->
+				<!--LostFocus: Wenn das Element den Fokus verliert-->
+				<!--Explicit: Wenn im Code Behind explizit angegeben-->
+				
+				<!--FallbackValue: Gibt den Standardwert vor, wenn das Binding nicht funktioniert hat-->
+			</TextBlock.Text>
+		</TextBlock>
+		<Slider Name="BindingSlider"/>
+		<!--Slider -> TextBlock.Text-->
+		
+		<!--Kurzschreibweise-->
+		<!--Mithilfe von { } (Markup Extension) kann ein Binding auf eine Codezeile gekürzt werden-->
+		<TextBlock Text="{Binding ElementName=BindingSlider, Path=Value}"/>
+		<!--<TextBlock Text="{Binding BindingSlider.Value}"/>-->
+		
+		<!--Converter-->
+		<!--Ermöglicht, die Konvertierung von zwei inkompatiblen Properties bei den Bindings-->
+		<!--z.B. Slider Value: double, Margin: Thickness-->
+		<!--Es gibt einige vordefinierte Converter die verwendet werden können z.B. BooleanToVisibilityConverter-->
+		<CheckBox Content="Button Visible" Name="BV"/>
+		<!--<Button Content="Sichtbar" Visibility="{Binding ElementName=BV, Path=IsChecked, Converter=BooleanToVisibilityConverter}"/> --><!--Funktioniert nicht ohne Converter-->
+		<Button Content="Sichtbar">
+			<!--Funktioniert nicht ohne Converter-->
+			<Button.Visibility>
+				<Binding ElementName="BV" Path="IsChecked">
+					<Binding.Converter>
+						<BooleanToVisibilityConverter/>
+					</Binding.Converter>
+				</Binding>
+			</Button.Visibility>
+		</Button>
+		
+		<!--Eigener Converter-->
+		<!--Double (Slider) zu Thickness (Margin)-->
+		<Slider Name="MarginSlider" Maximum="100"/>
+		<Button Content="Test">
+			<Button.Margin>
+				<Binding ElementName="MarginSlider" Path="Value">
+					<Binding.Converter>
+						<!--Hier muss jetzt der Namespace angegeben werden-->
+						<local:DoubleToThicknessConverter/>
+					</Binding.Converter>
+				</Binding>
+			</Button.Margin>
+		</Button>
+		
+		<!--MultiBinding-->
+		<!--Mehrere Bindings auf einen Wert-->
+		<!--Generell benötigt ein MultiBinding einen MultiConverter-->
+		<!--4 Slider für ein Margin-->
+		<Slider Name="LMarginSlider" Maximum="100"/>
+		<Slider Name="TMarginSlider" Maximum="100"/>
+		<Slider Name="RMarginSlider" Maximum="100"/>
+		<Slider Name="BMarginSlider" Maximum="100"/>
+		<Button Content="{Binding ElementName=LMarginSlider, Path=Value, StringFormat='Der Wert von LSlider ist: {0}'}">
+			<Button.Margin>
+				<MultiBinding>
+					<MultiBinding.Bindings>
+						<Binding ElementName="LMarginSlider" Path="Value"/>
+						<Binding ElementName="TMarginSlider" Path="Value"/>
+						<Binding ElementName="RMarginSlider" Path="Value"/>
+						<Binding ElementName="BMarginSlider" Path="Value"/>
+					</MultiBinding.Bindings>
+					<MultiBinding.Converter>
+						<!--Nachdem der MultiConverter in einem anderen Namespace ist, muss dieser Namespace importiert werden-->
+						<!--Window: xmlns:conv="clr-namespace:M004.Converter"-->
+						<conv:FourDoubleToThicknessConverter/>
+					</MultiBinding.Converter>
+				</MultiBinding>
+			</Button.Margin>
+		</Button>
+	</StackPanel>
+</Window>
