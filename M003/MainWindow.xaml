@@ -7,11 +7,11 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
 		WindowStartupLocation="CenterScreen">
-    <Grid>
+	<Grid>
 		<!--Elemente passen sich immer an den Layout Container rundherum an-->
 		<!--Der Layout Container gibt das Verhalten der Länge/Breite der Elemente vor-->
 		<!--Kann durch Width, Height, MinWidth, MinHeight, MaxWidth, MaxHeight angepasst werden-->
-    
+
 		<!--Margin, Padding-->
 		<!--Margin: Außenabstand, Element selbst zu dem Layout Container herum-->
 		<!--Padding: Innenabstand, Abstand des Inhalts des Elements zum Element selbst-->
@@ -48,7 +48,7 @@
 				<!--Breite passt sich auf die Elemente an-->
 			</StackPanel>
 		</StackPanel>
-		
+
 		<!--StackPanel lässt Elemente über den Fensterrand hinauslaufen-->
 		<!--WrapPanel erzeugt eine neue Spalte/Zeile für die überschüssigen Elemente-->
 		<WrapPanel Grid.Column="1">
@@ -136,7 +136,7 @@
 		<!--ScrollViewer ermöglicht den Inhalt Scrollbar zu machen-->
 		<!--Der Inhalt kann ein beliebiges Element sein (auch Container)-->
 		<!--Über ScrollBarVisibility können die Scroll Richtungen vorgegeben werden-->
-		
+
 		<!--Auto: Versteckt die ScrollBar, wenn nicht genug Inhalt zum scrollen da ist-->
 		<!--Hidden: Kann scrollen, aber ScrollBar nicht sichtbar-->
 		<!--Disabled: Kann garnicht in die entsprechende Richtung scrollen-->
