@@ -1,0 +1,150 @@
+﻿<Window x:Class="M003.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:M003"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+		WindowStartupLocation="CenterScreen">
+    <Grid>
+		<!--Elemente passen sich immer an den Layout Container rundherum an-->
+		<!--Der Layout Container gibt das Verhalten der Länge/Breite der Elemente vor-->
+		<!--Kann durch Width, Height, MinWidth, MinHeight, MaxWidth, MaxHeight angepasst werden-->
+    
+		<!--Margin, Padding-->
+		<!--Margin: Außenabstand, Element selbst zu dem Layout Container herum-->
+		<!--Padding: Innenabstand, Abstand des Inhalts des Elements zum Element selbst-->
+		<!--Margin und Padding werden immer in der Reihenfolge: Links, Oben, Rechts, Unten angegeben-->
+
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition Height="50"/>
+		</Grid.RowDefinitions>
+		<Button Grid.Column="1"
+				Grid.Row="2"
+				Grid.ColumnSpan="2"
+				Margin="10"
+				Content="OK"/>
+		<!--Attached Properties: Properties die von den Eltern Elementen vorgegeben werden-->
+
+		<!--StackPanel: Erzeugt automatisch Zeilen für die Elemente, streckt sie auf die volle Breite-->
+		<StackPanel Background="Aqua" Grid.RowSpan="2" Margin="10">
+			<Button Content="Ein Button" FontSize="40"/>
+			<Button Content="Ein kleinerer Button" FontSize="20"/>
+			<Button Content="Ein kleiner Button" FontSize="10"/>
+			<!--Höhe der Elemente in einem StackPanel passt sich automatisch an-->
+			<StackPanel Orientation="Horizontal" Height="50">
+				<Button Content="B1" Width="50"/>
+				<Button Content="B2"/>
+				<Button Content="B3"/>
+				<!--Elemente werden auf die Höhe gestreckt-->
+				<!--Breite passt sich auf die Elemente an-->
+			</StackPanel>
+		</StackPanel>
+		
+		<!--StackPanel lässt Elemente über den Fensterrand hinauslaufen-->
+		<!--WrapPanel erzeugt eine neue Spalte/Zeile für die überschüssigen Elemente-->
+		<WrapPanel Grid.Column="1">
+			<Button Content="Button"/>
+			<Button Content="Button"/>
+			<Button Content="Button"/>
+			<Button Content="Button"/>
+			<Button Content="Button"/>
+			<Button Content="Button"/>
+			<Button Content="Button"/>
+			<Button Content="Button"/>
+		</WrapPanel>
+
+		<!--Beim DockPanel gibt es 5 Positionen-->
+		<!--Links, Oben, Rechts, Unten, Mitte-->
+		<!--Reihenfolge der Elemente entscheidet welche Elemente den Platz der Ecken einnehmen-->
+		<DockPanel Grid.Column="2" LastChildFill="True">
+			<Button DockPanel.Dock="Top" Content="B1"/>
+			<StackPanel DockPanel.Dock="Left">
+				<Button Content="Menü 1"/>
+				<Button Content="Menü 2"/>
+				<Button Content="Menü 3"/>
+				<Button Content="Menü 4"/>
+			</StackPanel>
+			<Button DockPanel.Dock="Right" Content="B3"/>
+			<Button DockPanel.Dock="Bottom" Content="B4"/>
+			<StackPanel Margin="5">
+				<TextBlock Text="Überschrift" TextAlignment="Center"/>
+				<TextBlock Text="Das ist ein Text"/>
+				<TextBox Text="Eine Eingabe"/>
+				<Button Content="OK" MaxWidth="50"/>
+			</StackPanel>
+		</DockPanel>
+
+		<Grid Grid.Row="1" Grid.Column="1">
+			<Grid.ColumnDefinitions>
+				<!--Bei * Definitionen kann auch eine Zahl angegeben werden-->
+				<!--Dadurch können Prozentuale Breiten/Höhen erzeugt werden-->
+				<!--z.B. 2*, 1*, 1* -> Insgesamt 4 Plätze, 50%, 25%, 25%-->
+				<ColumnDefinition Width="2*"/>
+				<ColumnDefinition/>
+				<!--Eine Spalte mit Auto passt sich auf den Inhalt an-->
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<!--* bei Breite und Höhe passt die Breite/Höhe so an, das alle Elemente mit * gleich groß sind-->
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="20"/>
+			</Grid.RowDefinitions>
+			<!--Durch Auto gibt dieser Button jetzt die Breite der Spalte vor-->
+			<Button Grid.Column="2" Content="Button"/>
+		</Grid>
+
+		<!--UniformGrid: Passt Spalten/Zeilen automatisch anhand der Inhalte an-->
+		<UniformGrid Grid.Row="1" Grid.Column="2">
+			<Button/>
+			<Button/>
+			<Button/>
+			<Button/>
+			<Button/>
+		</UniformGrid>
+
+		<!--Border kann um einen Container herumgewrappt werden um einen Rahmen hinzuzufügen-->
+		<Border Grid.Row="2"
+				BorderBrush="Green"
+				BorderThickness="2">
+			<StackPanel Orientation="Horizontal">
+				<Button Content="Ein Button"/>
+				<Button Content="Ein Button"/>
+				<Button Content="Ein Button"/>
+				<Button Content="Ein Button"/>
+			</StackPanel>
+		</Border>
+
+		<!--Border skaliert nicht den Inhalt-->
+		<Border BorderThickness="10"
+				BorderBrush="Yellow"
+				Width="120"
+				Height="120"
+				Grid.Row="1">
+			<Button Width="100" Height="100"/>
+		</Border>
+
+		<!--ScrollViewer ermöglicht den Inhalt Scrollbar zu machen-->
+		<!--Der Inhalt kann ein beliebiges Element sein (auch Container)-->
+		<!--Über ScrollBarVisibility können die Scroll Richtungen vorgegeben werden-->
+		
+		<!--Auto: Versteckt die ScrollBar, wenn nicht genug Inhalt zum scrollen da ist-->
+		<!--Hidden: Kann scrollen, aber ScrollBar nicht sichtbar-->
+		<!--Disabled: Kann garnicht in die entsprechende Richtung scrollen-->
+		<ScrollViewer Grid.Row="1" Grid.Column="1"
+					  VerticalScrollBarVisibility="Auto">
+			<TextBlock Text="in TextDas ist ein TextDas ist ein TextDas ist ein TextDas ist ein Text"
+					   FontSize="30"
+					   TextWrapping="Wrap"/>
+		</ScrollViewer>
+	</Grid>
+</Window>
