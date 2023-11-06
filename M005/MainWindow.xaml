@@ -1,0 +1,52 @@
+﻿<Window x:Class="M005.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:local="clr-namespace:M005"
+		DataContext="{Binding RelativeSource={RelativeSource Self}}"
+		WindowStartupLocation="CenterScreen"
+        Title="MainWindow"
+		Height="450"
+		Width="800"
+		FontSize="18">
+	<Window.Resources>
+		<local:CollectionToStringConverter x:Key="CSC"/>
+	</Window.Resources>
+    <StackPanel>
+		<!--DataBinding-->
+		<!--Jetzt werden Daten vom Backend an die UI gebunden-->
+		<!--Benötigt INotifyPropertyChanged (sonst gibt das Backend die Werte nicht weiter)-->
+		
+		<!--DataContext-->
+		<!--Beschreibt, wo die Daten von den Binding herkommen-->
+		<!--2 Möglichkeiten: -->
+		<!--this.DataContext = this; (Konstruktor)-->
+		<!--{Binding RelativeSource={RelativeSource Self}} (XAML)-->
+		<TextBlock Text="{Binding SliderValue.Value}"/>
+		<Slider ValueChanged="Slider_ValueChanged"/>
+		
+		<!--Keine Updates, weil INotifyPropertyChanged fehlt-->
+
+		<StackPanel>
+			<StackPanel.DataContext>
+				<local:Person/>
+			</StackPanel.DataContext>
+			<TextBlock Text="{Binding Vorname}"/>
+			<TextBlock Text="{Binding Nachname}"/>
+			<TextBlock Text="{Binding Alter}"/>
+		</StackPanel>
+
+		<StackPanel>
+			<!--DataContext MainWindow-->
+			<TextBlock Text="{Binding Person.Vorname}"/>
+			<TextBlock Text="{Binding Person.Nachname}"/>
+			<TextBlock Text="{Binding Person.Alter}"/>
+		</StackPanel>
+		<Button Content="Alter++" Click="Button_Click"/>
+
+		<ListBox ItemsSource="{Binding PersonenListe, UpdateSourceTrigger=PropertyChanged}" Name="LB"/>
+		<Button Click="Button_Click_1" Content="Alter neu generieren"/>
+		
+		<!--Alle Personen aus der Liste als einzelner String darstellen-->
+		<TextBlock Text="{Binding LB.ItemsSource, Converter={StaticResource CSC}}"/>
+	</StackPanel>
+</Window>
