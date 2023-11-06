@@ -10,7 +10,7 @@
 		Height="450"
 		Width="800"
 		WindowStartupLocation="CenterScreen">
-    <StackPanel>
+	<StackPanel>
 		<!--Bindings-->
 		<!--Ermöglichen das Verbinden von einem Property an ein anderes Property-->
 		<!--i.d.R. ein Property im Code Behind mit einem Property einer UI Komponente-->
@@ -73,7 +73,7 @@
 		<!--z.B. Slider Value: double, Margin: Thickness-->
 		<!--Es gibt einige vordefinierte Converter die verwendet werden können z.B. BooleanToVisibilityConverter-->
 		<CheckBox Content="Button Visible" Name="BV"/>
-		<!--<Button Content="Sichtbar" Visibility="{Binding ElementName=BV, Path=IsChecked, Converter=BooleanToVisibilityConverter}"/> --><!--Funktioniert nicht ohne Converter-->
+		<Button Content="Sichtbar" Visibility="{Binding ElementName=BV, Path=IsChecked}"/>
 		<Button Content="Sichtbar">
 			<!--Funktioniert nicht ohne Converter-->
 			<Button.Visibility>
