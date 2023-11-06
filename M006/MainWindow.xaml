@@ -1,0 +1,102 @@
+﻿<Window x:Class="M006.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:M006"
+		xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="300"
+		WindowStartupLocation="CenterScreen">
+	<!--Statische Resourcen-->
+	<!--Resourcen, die global angelegt werden können, um sie wiederzuverwenden-->
+	
+	<!--Können an 4 Ebenen angelegt werden-->
+	<!--Lokal auf dem Element-->
+	<!--Auf dem Window-->
+	<!--In App.xaml (Überall sichtbar)-->
+	<!--In externen Bibliotheken (ResourceDictionaries)-->
+	<Window.Resources>
+		<!--Hier wird nur die Resource angelegt-->
+		<SolidColorBrush Color="Aqua" x:Key="DefaultColor"/>
+		<sys:Double x:Key="DefaultFontSize">10</sys:Double>
+		<Thickness x:Key="DefaultMargin">10, 0</Thickness>
+		
+		<!--Converter können auch hier global eingebunden werden-->
+		<!--Wird benötigt zur Verwendung in einer Markup-Extension-->
+		<local:DoubleToThicknessConverter x:Key="DT"/>
+
+		<!--Add -> ResourceDictionary-->
+		<!--Externe Resourcen über ResourceDictionary einbinden-->
+		<ResourceDictionary Source="Dictionary1.xaml" x:Key="Extern"/>
+
+		<!--Wenn ein Style als Resource deklariert wird, ist dieser automatisch Global-->
+		<!--Um einen Style als Global zu definieren (Projektweit), kann dieser in App.xaml definiert werden-->
+		<!--Wenn der Style einen Key bekommt, ist er nicht mehr Global-->
+		<Style TargetType="Button" x:Key="BtnStyle">
+			<Setter Property="Background" Value="White"/>
+			<Setter Property="Foreground" Value="Black"/>
+			<Setter Property="Margin" Value="10"/>
+			<Setter Property="Content">
+				<Setter.Value>
+					<StackPanel>
+						<TextBlock Text="Oben"/>
+						<TextBlock Text="Unten"/>
+					</StackPanel>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		
+		<!--Dieser Style wird jetzt auf dem Window als global gesehen-->
+		<!--Dieser Style übernimmt alle Eigenschaften von BtnStyle und fügt eigene Dinge hinzu-->
+		<Style TargetType="Button" BasedOn="{StaticResource BtnStyle}">
+			<Style.Setters>
+				<Setter Property="FontSize" Value="30"/>
+			</Style.Setters>
+		</Style>
+	</Window.Resources>
+	
+	<!--Über StaticResource auf eine Resource zugreifen-->
+	<StackPanel Background="{StaticResource DefaultColor}"
+				Margin="{StaticResource DefaultMargin}">
+		<TextBlock FontSize="{StaticResource DefaultFontSize}"
+				   Background="{StaticResource GlobalColor}"
+				   Text="Ein Test"/>
+		<!--Style-->
+		<!--Ermöglichen komplettes Redesign einer Komponente-->
+		<!--Kann auch selektiv verwendet werden (manche Elemente haben den Style, andere nicht)-->
+		<!--Kann global auf alle Elemente eines bestimmten Typens angewandt werden-->
+		<Button>
+			<Button.Style>
+				<!--Das Style Element wird als Container für alle Setter verwendet-->
+				<Style TargetType="Button">
+					<Setter Property="Background" Value="White"/>
+					<Setter Property="Foreground" Value="Black"/>
+					<Setter Property="Margin" Value="10"/>
+					<Setter Property="Content">
+						<Setter.Value>
+							<StackPanel>
+								<TextBlock Text="Oben"/>
+								<TextBlock Text="Unten"/>
+							</StackPanel>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</Button.Style>
+		</Button>
+		
+		<!--Button Style auslagern in Resources-->
+		<Button Content="Zwei Button" Style="{StaticResource BtnStyle}"/>
+		
+		<!--Dieser Button bekommt von App.xaml den Style-->
+		<!--Der App.xaml Style wird vom Window Style überschrieben-->
+		<Button/>
+
+		<!--Mit x:Null kann ein Style entfernt werden-->
+		<Button Style="{x:Null}"/>
+
+		<!--Converter per Markup-Extension einbinden über StaticResource-->
+		<Slider x:Name="MarginSlider" Maximum="50"/>
+		<Button Margin="{Binding ElementName=MarginSlider, Path=Value, Converter={StaticResource DT}}"/>
+	</StackPanel>
+</Window>
