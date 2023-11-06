@@ -1,28 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace M000
+namespace M000;
+
+public partial class MainWindow : Window
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
-	public partial class MainWindow : Window
+	public Person Current { get; set; } = new();
+
+	public MainWindow()
 	{
-		public MainWindow()
-		{
-			InitializeComponent();
-		}
+		InitializeComponent();
+		//this.DataContext = this;
+	}
+
+	private void Ok_Clicked(object sender, RoutedEventArgs e)
+	{
+		MessageBox.Show(
+			Current.GetType()
+			.GetProperties()
+			.Aggregate(string.Empty, (agg, str) => $"{agg}{str.Name}: {str.GetValue(Current)}\n"),
+			"Neue Person", MessageBoxButton.OK, MessageBoxImage.Information);
 	}
 }
