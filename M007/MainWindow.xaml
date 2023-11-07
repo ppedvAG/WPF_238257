@@ -1,0 +1,81 @@
+﻿<Window x:Class="M007.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:M007"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="300"
+		WindowStartupLocation="CenterScreen"
+		DataContext="{Binding RelativeSource={RelativeSource Self}}">
+	<Window.Resources>
+		<ControlTemplate TargetType="Button" x:Key="BtnTemplate">
+			<Border BorderBrush="Black" BorderThickness="2">
+				<!--TemplateBinding-->
+				<!--Ermöglicht innerhalb von Templates eine Referenz auf die originalen Werte-->
+				<TextBlock TextWrapping="Wrap"
+						   Text="{TemplateBinding Content}"
+						   FontSize="{TemplateBinding FontSize}"
+						   FontFamily="{TemplateBinding FontFamily}"
+						   HorizontalAlignment="Center"/>
+			</Border>
+		</ControlTemplate>
+
+		<DataTemplate DataType="{x:Type local:Person}">
+			<Border BorderBrush="Black" BorderThickness="1">
+				<StackPanel Orientation="Horizontal">
+					<!--Hier werden Bindings auf die Felder der Klasse gemacht-->
+					<TextBlock Text="{Binding ID, StringFormat=' {0} '}"/>
+					<TextBlock Text="{Binding Name, StringFormat=' {0} '}"/>
+					<TextBlock Text="{Binding Description}"/>
+				</StackPanel>
+			</Border>
+		</DataTemplate>
+	</Window.Resources>
+    <StackPanel>
+		<!--Templates-->
+		<!--Über Templates kann effektiv alles von einem UI Element angepasst werden-->
+		<!--Verschiedene Templates: ControlTemplate, DataTemplate, ItemTemplate-->
+		<Button Template="{StaticResource BtnTemplate}"
+				Content="Ein Test Ein TestEin TestEin TestEin Test"
+				FontFamily="Consolas"
+				FontSize="20"/>
+		<!--&#10: Zeilenumbruch, Hexadezimale Darstellung der Zeichentabelle-->
+		<Button Content="Ein Test &#10; Ein TestEin TestEin TestEin Test"
+				FontFamily="Consolas"
+				FontSize="20"/>
+		
+		<!--DataTemplate-->
+		<!--Das DataTemplate gibt den Aufbau von Objekten innerhalb des XAML vor-->
+		<!--Das DataTemplate benötigt einen Typen, anhand des Typen können über Bindings die Inhalte des Objekts dargestellt werden-->
+		<ListBox ItemsSource="{Binding Personen}">
+			<!--ListBox.Template = Template von ListBox selbst-->
+			<!--ListBox.ItemTemplate = Template von den Items-->
+			<ListBox.Template>
+				<ControlTemplate TargetType="ListBox">
+					<Border BorderBrush="Aqua" BorderThickness="1">
+						<ContentPresenter ContentTemplate="{TemplateBinding ItemTemplate}"
+										  Content="{TemplateBinding ItemsSource}"/>
+					</Border>
+				</ControlTemplate>
+			</ListBox.Template>
+			<ListBox.ItemTemplate>
+				<!--Hier muss über x:Type der Typ des Template angegeben werden-->
+				<DataTemplate DataType="{x:Type local:Person}">
+					<!--Hier werden Bindings auf die Felder der Klasse gemacht-->
+					<!--<Border BorderBrush="Black" BorderThickness="1">-->
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="{Binding ID, StringFormat=' {0} '}"/>
+							<TextBlock Text="{Binding Name, StringFormat=' {0} '}"/>
+							<TextBlock Text="{Binding Description}"/>
+						</StackPanel>
+					<!--</Border>-->
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+
+		<!--Globale DataTemplates können auch in den Resources definiert werden-->
+		<!--Diese DataTemplates werden dann überall angewandt-->
+		<ComboBox ItemsSource="{Binding Personen}"/>
+	</StackPanel>
+</Window>
