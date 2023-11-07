@@ -88,7 +88,7 @@
 							<Binding ElementName="ASlider" Path="Value"/>
 						</MultiBinding.Bindings>
 						<MultiBinding.Converter>
-							<conv:FourValueToColorConverter/>
+							<local:FourValueToColorConverter/>
 						</MultiBinding.Converter>
 					</MultiBinding>
 				</Rectangle.Fill>
