@@ -54,8 +54,7 @@
 			<ListBox.Template>
 				<ControlTemplate TargetType="ListBox">
 					<Border BorderBrush="Aqua" BorderThickness="1">
-						<ContentPresenter ContentTemplate="{TemplateBinding ItemTemplate}"
-										  Content="{TemplateBinding ItemsSource}"/>
+						<ItemsControl ItemsSource="{TemplateBinding ItemsSource}"/>
 					</Border>
 				</ControlTemplate>
 			</ListBox.Template>
@@ -63,13 +62,13 @@
 				<!--Hier muss über x:Type der Typ des Template angegeben werden-->
 				<DataTemplate DataType="{x:Type local:Person}">
 					<!--Hier werden Bindings auf die Felder der Klasse gemacht-->
-					<!--<Border BorderBrush="Black" BorderThickness="1">-->
+					<Border BorderBrush="Black" BorderThickness="1">
 						<StackPanel Orientation="Horizontal">
 							<TextBlock Text="{Binding ID, StringFormat=' {0} '}"/>
 							<TextBlock Text="{Binding Name, StringFormat=' {0} '}"/>
 							<TextBlock Text="{Binding Description}"/>
 						</StackPanel>
-					<!--</Border>-->
+					</Border>
 				</DataTemplate>
 			</ListBox.ItemTemplate>
 		</ListBox>
