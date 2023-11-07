@@ -19,23 +19,23 @@
 		</LinearGradientBrush>
 	</Window.Background>
 	<StackPanel Margin="10">
-		<UniformGrid Columns="2" Margin="0, 0, 0, 5">
+		<UniformGrid>
 			<TextBlock Text="Vorname: "/>
 			<TextBox Text="{Binding Current.Vorname}"/>
 		</UniformGrid>
-		<UniformGrid Columns="2" Margin="0, 0, 0, 5">
+		<UniformGrid>
 			<TextBlock Text="Nachname: "/>
 			<TextBox Text="{Binding Current.Nachname}"/>
 		</UniformGrid>
-		<UniformGrid Columns="2" Margin="0, 0, 0, 5">
+		<UniformGrid>
 			<TextBlock Text="Geburtsdatum: "/>
 			<DatePicker SelectedDate="{Binding Current.GebDat}"/>
 		</UniformGrid>
-		<UniformGrid Columns="2" Margin="0, 0, 0, 5">
+		<UniformGrid>
 			<TextBlock Text="Verheiratet: "/>
 			<CheckBox VerticalAlignment="Center" IsChecked="{Binding Current.Verheiratet}"/>
 		</UniformGrid>
-		<UniformGrid Columns="2" Margin="0, 0, 0, 5">
+		<UniformGrid>
 			<TextBlock Text="Lieblingsfarbe: "/>
 			<ComboBox SelectedValue="{Binding Current.Lieblingsfarbe}">
 				<ComboBoxItem Content="Rot" Foreground="Red"/>
@@ -44,7 +44,7 @@
 				<ComboBoxItem Content="Gelb" Foreground="Yellow"/>
 			</ComboBox>
 		</UniformGrid>
-		<UniformGrid Columns="2" Margin="0, 0, 0, 5">
+		<UniformGrid>
 			<TextBlock Text="Geschlecht: "/>
 			<StackPanel>
 				<StackPanel.Resources>

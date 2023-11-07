@@ -3,7 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:M000"
              StartupUri="MainWindow.xaml">
-    <Application.Resources>
-         
+	<Application.Resources>
+		<Style TargetType="UniformGrid">
+			<Setter Property="Margin" Value="0,0,0,5"/>
+			<Setter Property="Columns" Value="2"/>
+		</Style>
     </Application.Resources>
 </Application>
