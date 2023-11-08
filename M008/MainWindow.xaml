@@ -1,0 +1,90 @@
+﻿<Window x:Class="M008.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:M008"
+		xmlns:valid="clr-namespace:M008.Validation"
+		DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Title="MainWindow" Height="450" Width="300"
+		WindowStartupLocation="CenterScreen">
+	<Window.Resources>
+		<ControlTemplate x:Key="Error">
+			<StackPanel>
+				<Border BorderBrush="Red" BorderThickness="2">
+					<!--Der AdornedElementPlaceholder dient als Platzhalter für das zu Validierende UI Element-->
+					<AdornedElementPlaceholder x:Name="OriginalesElement"/>
+				</Border>
+				<!--Hier kann jetzt noch ein TextBlock o.ä. erstellt werden, um die Fehlermeldung(en) anzuzeigen-->
+				<!--In Validation.Errors ist immer nur maximal ein Fehler enthalten-->
+				<TextBlock Text="{Binding ElementName=OriginalesElement, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"/>
+			</StackPanel>
+		</ControlTemplate>
+
+		<local:ValidationRuleCollection x:Key="Rules">
+			<valid:LengthRule/>
+			<valid:LetterRule/>
+		</local:ValidationRuleCollection>
+	</Window.Resources>
+    <StackPanel>
+		<!--Validation-->
+		<!--Werte prüfen, bevor diese per Binding ans Backend weitergegeben werden-->
+		<!--2 Möglichkeiten-->
+		<!--ValidationRules mit eigenen Klassen-->
+		<!--ValidateOnExceptions, ValidateOnDataErrors-->
+		<TextBlock Text="Vorname: "/>
+		
+		<!--Regeln: Zwischen 3 und 15 Zeichen, nur Buchstaben-->
+		<TextBox Validation.ErrorTemplate="{StaticResource Error}">
+			<TextBox.Text>
+				<Binding Path="Test.Vorname" UpdateSourceTrigger="PropertyChanged">
+					<!--Hier Rules einbinden wie bei Converter-->
+					<Binding.ValidationRules>
+						<!--Reihenfolge der Regeln beeinflusst die Fehlermeldungen-->
+						<valid:LengthRule/>
+						<valid:LetterRule/>
+					</Binding.ValidationRules>
+				</Binding>
+			</TextBox.Text>
+		</TextBox>
+
+		<TextBox>
+			<TextBox.Text>
+				<!--<Binding ElementName="Vorname" Path="Value"/> Funktioniert nicht-->
+				<Binding Path="Vorname.Value"/> <!--Funktioniert-->
+			</TextBox.Text>
+		</TextBox>
+
+		<!--<TextBox Text="{Binding ElementName=Test, Path=Vorname}"/> Funktioniert nicht-->
+		<TextBox Text="{Binding Test.Vorname}"/> <!--Funktioniert-->
+		
+		<!--ElementName funktioniert nur bei DependencyProperties (-> UI Elementen)-->
+		<!--Wenn ein Backend Property gebunden werden soll, muss die Kurzschreibweise verwendet werden-->
+		
+		<!--ValidatesOnExceptions-->
+		<!--Wenn bei der Validierung eine Exception auftritt, wird der Inhalt der Exception zurückgegeben-->
+		<TextBlock Text="Nachname: "/>
+		<TextBox Validation.ErrorTemplate="{StaticResource Error}">
+			<TextBox.Text>
+				<Binding Path="Test.Nachname"
+						 UpdateSourceTrigger="PropertyChanged" 
+						 ValidatesOnExceptions="True"/>
+			</TextBox.Text>
+		</TextBox>
+
+		<!--ValidatesOnDataErrors-->
+		<!--Ermöglicht die Validierung über das IDataErrorInfo Interface mit einem Indexer-->
+		<TextBlock Text="Vorname: "/>
+		<TextBox Validation.ErrorTemplate="{StaticResource Error}">
+			<TextBox.Text>
+				<Binding Path="Test.Vorname" UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True"/>
+			</TextBox.Text>
+		</TextBox>
+
+		<!--Validierungen in Markup Extension-->
+		<!--Wenn Validierungen mehrmals verwendet werden sollen, können diese in einer Resource gespeichert werden-->
+		<!--Nicht möglich, da das ValidationRules Property get-only ist-->
+		<!--.NET Source Code: https://github.com/dotnet-->
+		<TextBlock Text="Vorname: "/>
+		<TextBox Text="{local:ValidationMarkup {Binding Path='Test.Vorname', UpdateSourceTrigger=PropertyChanged}, {StaticResource Rules}}"
+				 Validation.ErrorTemplate="{StaticResource Error}"/>
+	</StackPanel>
+</Window>
