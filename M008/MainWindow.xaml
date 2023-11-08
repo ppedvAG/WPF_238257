@@ -29,7 +29,7 @@
 		<!--Werte prüfen, bevor diese per Binding ans Backend weitergegeben werden-->
 		<!--2 Möglichkeiten-->
 		<!--ValidationRules mit eigenen Klassen-->
-		<!--ValidateOnExceptions, ValidateOnDataErrors-->
+		<!--ValidatesOnExceptions, ValidatesOnDataErrors-->
 		<TextBlock Text="Vorname: "/>
 		
 		<!--Regeln: Zwischen 3 und 15 Zeichen, nur Buchstaben-->
@@ -45,7 +45,7 @@
 				</Binding>
 			</TextBox.Text>
 		</TextBox>
-
+		
 		<TextBox>
 			<TextBox.Text>
 				<!--<Binding ElementName="Vorname" Path="Value"/> Funktioniert nicht-->
