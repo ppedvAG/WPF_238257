@@ -1,0 +1,77 @@
+﻿<Window x:Class="M009.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:M009"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="300"
+		WindowStartupLocation="CenterScreen">
+	<Window.Resources>
+		
+	</Window.Resources>
+    <StackPanel>
+		<!--Trigger-->
+		<!--Mit einem Trigger kann dynamisch auf bestimmte Änderung in UI oder Backend reagiert werden (ähnlich wie Events)-->
+		<!--2 verschiedene Triggerarten: Trigger, DataTrigger-->
+		<!--Trigger kann nur mit dem Element selbst arbeiten, DataTrigger kann auch an Backend-/Dependency Properties gebunden werden-->
+		<!--Müssen immer in Styles definiert werden-->
+
+		<ComboBox Name="CB">
+			<!--ComboBox Objekt -> Style Property -> Style Objekt -> Triggers Property -> Einzelnen oder mehrere Trigger -> Jeder Trigger hat selbst auch Variablen-->
+			<ComboBox.Style>
+				<Style TargetType="ComboBox">
+					<Style.Triggers>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter Property="BorderThickness" Value="5"/>
+							<Setter Property="BorderBrush" Value="Black"/>
+							<Setter Property="Margin" Value="10"/>
+						</Trigger>
+					</Style.Triggers>
+				</Style>
+			</ComboBox.Style>
+			<ComboBox.Items>
+				<ComboBoxItem Content="C1"/>
+				<ComboBoxItem Content="C2"/>
+				<ComboBoxItem Content="C3"/>
+			</ComboBox.Items>
+		</ComboBox>
+
+		<!--Wenn über den Button gehovered wird, soll der Inhalt des Buttons im TextBlock angezeigt werden-->
+		<TextBlock>
+			<TextBlock.Style>
+				<Style TargetType="TextBlock">
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding ElementName=HoverButton, Path=IsMouseOver}" Value="True">
+							<Setter Property="Text" Value="{Binding ElementName=HoverButton, Path=Content}"/>
+							<Setter Property="Background" Value="LightGreen"/>
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</TextBlock.Style>
+		</TextBlock>
+		<Button x:Name="HoverButton" Content="Ein Test"/>
+
+		<!--Wenn über den Button gehovered wird UND in der ComboBox das C3 Element ausgewählt ist, soll der Inhalt der ComboBox im TextBlock angezeigt werden-->
+		<TextBlock>
+			<TextBlock.Style>
+				<Style TargetType="TextBlock">
+					<Style.Triggers>
+						<MultiDataTrigger>
+							<MultiDataTrigger.Conditions>
+								<Condition Binding="{Binding ElementName=HoverButton, Path=IsMouseOver}" Value="True"/>
+								<Condition Binding="{Binding ElementName=CB, Path=SelectedItem.Content}" Value="C3"/>
+							</MultiDataTrigger.Conditions>
+							<Setter Property="Text" Value="{Binding ElementName=CB, Path=SelectedItem.Content}"/>
+							<Setter Property="Background" Value="LightBlue"/>
+						</MultiDataTrigger>
+					</Style.Triggers>
+				</Style>
+			</TextBlock.Style>
+		</TextBlock>
+		
+		<!--Wenn ein Element disabled ist, kann es sein, das der Trigger nicht triggert-->
+		<!--Es kann im Style vor dem Trigger IsEnabled auf True gesetzt werden mittels-->
+		<!--<Setter Property="IsEnabled" Value="True"/>-->
+	</StackPanel>
+</Window>
