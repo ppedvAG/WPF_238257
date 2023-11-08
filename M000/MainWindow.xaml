@@ -4,12 +4,45 @@
 		xmlns:local="clr-namespace:M000"
 		xmlns:conv="clr-namespace:M000.Converter"
 		xmlns:model="clr-namespace:M000.Model"
+		xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+		xmlns:valid="clr-namespace:M000.Validation"
 		DataContext="{Binding RelativeSource={RelativeSource Self}}"
 		WindowStartupLocation="CenterScreen"
         Title="MainWindow"
 		Width="400"
 		SizeToContent="Height"
 		FontSize="18">
+	<Window.Resources>
+		<ObjectDataProvider x:Key="Odp_Colors" MethodName="GetType" ObjectType="{x:Type sys:Type}">
+			<ObjectDataProvider.MethodParameters>
+				<sys:String>
+					System.Windows.Media.Colors, PresentationCore, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+				</sys:String>
+			</ObjectDataProvider.MethodParameters>
+		</ObjectDataProvider>
+		<ObjectDataProvider x:Key="Odp_ColorsProperties" MethodName="GetProperties" ObjectInstance="{StaticResource Odp_Colors}"/>
+
+		<conv:StringToColorConverter x:Key="SCC"/>
+		<valid:DateRangeRule x:Key="DateRule"/>
+		<valid:ColorRule x:Key="ColRule" ValidatesOnTargetUpdated="True"/>
+
+		<local:ValidationRuleCollection x:Key="TextRules">
+			<valid:LengthRule ValidatesOnTargetUpdated="True"/>
+			<valid:LetterRule ValidatesOnTargetUpdated="True"/>
+		</local:ValidationRuleCollection>
+
+		<ControlTemplate x:Key="ErrorTemplate">
+			<StackPanel>
+				<AdornedElementPlaceholder x:Name="ValidierendesElement"/>
+				<Popup IsOpen="{Binding ElementName=ValidierendesElement, Path=AdornedElement.IsMouseOver, Mode=OneWay}"
+					   PlacementTarget="{Binding ElementName=ValidierendesElement}">
+					<TextBlock Text="{Binding ElementName=ValidierendesElement, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
+							   Background="Red"
+							   Foreground="White"/>
+				</Popup>
+			</StackPanel>
+		</ControlTemplate>
+	</Window.Resources>
 	<Window.Background>
 		<LinearGradientBrush>
 			<LinearGradientBrush.GradientStops>
@@ -21,15 +54,18 @@
 	<StackPanel Margin="10">
 		<UniformGrid>
 			<TextBlock Text="Vorname: "/>
-			<TextBox Text="{Binding Current.Vorname}"/>
+			<TextBox Text="{local:ValidationMarkup {Binding Current.Vorname}, {StaticResource TextRules}}"
+					 Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
 		</UniformGrid>
 		<UniformGrid>
 			<TextBlock Text="Nachname: "/>
-			<TextBox Text="{Binding Current.Nachname}"/>
+			<TextBox Text="{local:ValidationMarkup {Binding Current.Nachname}, {StaticResource TextRules}}"
+					 Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
 		</UniformGrid>
 		<UniformGrid>
 			<TextBlock Text="Geburtsdatum: "/>
-			<DatePicker SelectedDate="{Binding Current.GebDat}"/>
+			<DatePicker SelectedDate="{local:ValidationTest {Binding Current.GebDat}, {StaticResource DateRule}}"
+						Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
 		</UniformGrid>
 		<UniformGrid>
 			<TextBlock Text="Verheiratet: "/>
@@ -37,23 +73,47 @@
 		</UniformGrid>
 		<UniformGrid>
 			<TextBlock Text="Lieblingsfarbe: "/>
-			<ComboBox SelectedValue="{Binding Current.Lieblingsfarbe}">
-				<ComboBoxItem Content="Rot" Foreground="Red"/>
+			<ComboBox SelectedValue="{local:ValidationTest {Binding Current.Lieblingsfarbe, Converter={StaticResource SCC}}, {StaticResource ColRule}}"
+					  SelectedValuePath="Name"
+					  Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
+					  ItemsSource="{Binding Source={StaticResource Odp_ColorsProperties}}">
+				<ComboBox.ItemTemplate>
+					<DataTemplate>
+						<StackPanel Orientation="Horizontal">
+							<Rectangle Width="20"
+									   Height="20"
+									   Stroke="Black"
+									   StrokeThickness="2"
+									   Fill="{Binding Name}"/>
+							<TextBlock Text="{Binding Name, StringFormat=' {0} '}"/>
+						</StackPanel>
+					</DataTemplate>
+				</ComboBox.ItemTemplate>
+				<!--<ComboBoxItem Content="Rot" Foreground="Red"/>
 				<ComboBoxItem Content="Grün" Foreground="Green"/>
 				<ComboBoxItem Content="Blau" Foreground="Blue"/>
-				<ComboBoxItem Content="Gelb" Foreground="Yellow"/>
+				<ComboBoxItem Content="Gelb" Foreground="Yellow"/>-->
 			</ComboBox>
 		</UniformGrid>
 		<UniformGrid>
+			<UniformGrid.Resources>
+				<conv:BooleanToGeschlechtConverter x:Key="BG"/>
+			</UniformGrid.Resources>
+			
 			<TextBlock Text="Geschlecht: "/>
-			<StackPanel>
-				<StackPanel.Resources>
-					<conv:BooleanToGeschlechtConverter x:Key="BG"/>
-				</StackPanel.Resources>
-				<RadioButton GroupName="G" Content="M" IsChecked="{Binding Current.Gender, Converter={StaticResource BG}, ConverterParameter={x:Static model:Geschlecht.M}}"/>
-				<RadioButton GroupName="G" Content="W" IsChecked="{Binding Current.Gender, Converter={StaticResource BG}, ConverterParameter={x:Static model:Geschlecht.W}}"/>
-				<RadioButton GroupName="G" Content="D" IsChecked="{Binding Current.Gender, Converter={StaticResource BG}, ConverterParameter={x:Static model:Geschlecht.D}}"/>
-			</StackPanel>
+			<ItemsControl ItemsSource="{local:Enum {x:Type model:Geschlecht}}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate DataType="{x:Type model:Geschlecht}">
+						<RadioButton GroupName="Geschlecht"
+									 VerticalContentAlignment="Center"
+									 Content="{Binding}">
+						</RadioButton>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+			<!--<RadioButton GroupName="G" Content="M" IsChecked="{Binding Current.Gender, Converter={StaticResource BG}, ConverterParameter={x:Static model:Geschlecht.M}}"/>
+			<RadioButton GroupName="G" Content="W" IsChecked="{Binding Current.Gender, Converter={StaticResource BG}, ConverterParameter={x:Static model:Geschlecht.W}}"/>
+			<RadioButton GroupName="G" Content="D" IsChecked="{Binding Current.Gender, Converter={StaticResource BG}, ConverterParameter={x:Static model:Geschlecht.D}}"/>-->
 		</UniformGrid>
 		<Grid Margin="0, 0, 0, 5">
 			<Grid.ColumnDefinitions>
