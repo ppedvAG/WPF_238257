@@ -54,18 +54,21 @@
 	<StackPanel Margin="10">
 		<UniformGrid>
 			<TextBlock Text="Vorname: "/>
-			<TextBox Text="{local:ValidationMarkup {Binding Current.Vorname}, {StaticResource TextRules}}"
-					 Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
+			<TextBox Text="{local:ValidationMarkup {Binding Current.Vorname, UpdateSourceTrigger=PropertyChanged}, {StaticResource TextRules}}"
+					 Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
+					 Name="VornameTB"/>
 		</UniformGrid>
 		<UniformGrid>
 			<TextBlock Text="Nachname: "/>
-			<TextBox Text="{local:ValidationMarkup {Binding Current.Nachname}, {StaticResource TextRules}}"
-					 Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
+			<TextBox Text="{local:ValidationMarkup {Binding Current.Nachname, UpdateSourceTrigger=PropertyChanged}, {StaticResource TextRules}}"
+					 Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
+					 Name="NachnameTB"/>
 		</UniformGrid>
 		<UniformGrid>
 			<TextBlock Text="Geburtsdatum: "/>
-			<DatePicker SelectedDate="{local:ValidationTest {Binding Current.GebDat}, {StaticResource DateRule}}"
-						Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
+			<DatePicker SelectedDate="{local:ValidationTest {Binding Current.GebDat, UpdateSourceTrigger=PropertyChanged}, {StaticResource DateRule}}"
+						Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
+						Name="GebDatDP"/>
 		</UniformGrid>
 		<UniformGrid>
 			<TextBlock Text="Verheiratet: "/>
@@ -73,10 +76,11 @@
 		</UniformGrid>
 		<UniformGrid>
 			<TextBlock Text="Lieblingsfarbe: "/>
-			<ComboBox SelectedValue="{local:ValidationTest {Binding Current.Lieblingsfarbe, Converter={StaticResource SCC}}, {StaticResource ColRule}}"
+			<ComboBox SelectedValue="{local:ValidationTest {Binding Current.Lieblingsfarbe, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource SCC}}, {StaticResource ColRule}}"
 					  SelectedValuePath="Name"
 					  Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
-					  ItemsSource="{Binding Source={StaticResource Odp_ColorsProperties}}">
+					  ItemsSource="{Binding Source={StaticResource Odp_ColorsProperties}}"
+					  Name="FarbeCB">
 				<ComboBox.ItemTemplate>
 					<DataTemplate>
 						<StackPanel Orientation="Horizontal">
@@ -99,18 +103,23 @@
 			<UniformGrid.Resources>
 				<conv:BooleanToGeschlechtConverter x:Key="BG"/>
 			</UniformGrid.Resources>
-			
+
 			<TextBlock Text="Geschlecht: "/>
-			<ItemsControl ItemsSource="{local:Enum {x:Type model:Geschlecht}}">
+			<ComboBox ItemsSource="{local:Enum {x:Type model:Geschlecht}}" SelectedValue="{Binding Current.Gender}"/>
+			
+			<!--<ItemsControl ItemsSource="{local:Enum {x:Type model:Geschlecht}}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate DataType="{x:Type model:Geschlecht}">
-						<RadioButton GroupName="Geschlecht"
-									 VerticalContentAlignment="Center"
-									 Content="{Binding}">
-						</RadioButton>
+						<CheckBox VerticalContentAlignment="Center" Content="{Binding}" Name="RB"
+							IsChecked="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window},
+												Path=Current.Gender,
+												Converter={StaticResource BG},
+												ConverterParameter={local:ConverterParameterReference {Binding ElementName=RB, Path=Content}}}">
+						</CheckBox>
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
-			</ItemsControl>
+			</ItemsControl>-->
+			
 			<!--<RadioButton GroupName="G" Content="M" IsChecked="{Binding Current.Gender, Converter={StaticResource BG}, ConverterParameter={x:Static model:Geschlecht.M}}"/>
 			<RadioButton GroupName="G" Content="W" IsChecked="{Binding Current.Gender, Converter={StaticResource BG}, ConverterParameter={x:Static model:Geschlecht.W}}"/>
 			<RadioButton GroupName="G" Content="D" IsChecked="{Binding Current.Gender, Converter={StaticResource BG}, ConverterParameter={x:Static model:Geschlecht.D}}"/>-->
@@ -121,7 +130,25 @@
 				<ColumnDefinition/>
 				<ColumnDefinition/>
 			</Grid.ColumnDefinitions>
-			<Button Content="OK" Grid.Column="1" Margin="0, 0, 5, 0" Click="Ok_Clicked"/>
+			<Button Content="OK" Grid.Column="1" Margin="0, 0, 5, 0" Click="Ok_Clicked">
+				<Button.Style>
+					<Style TargetType="Button">
+						<!-- BasedOn="{StaticResource ButtonDefaultStyle}"-->
+						<Setter Property="IsEnabled" Value="False"/>
+						<Style.Triggers>
+							<MultiDataTrigger>
+								<MultiDataTrigger.Conditions>
+									<Condition Binding="{Binding ElementName=VornameTB, Path=(Validation.HasError)}" Value="False"/>
+									<Condition Binding="{Binding ElementName=NachnameTB, Path=(Validation.HasError)}" Value="False"/>
+									<Condition Binding="{Binding ElementName=GebDatDP, Path=(Validation.HasError)}" Value="False"/>
+									<Condition Binding="{Binding ElementName=FarbeCB, Path=(Validation.HasError)}" Value="False"/>
+								</MultiDataTrigger.Conditions>
+								<Setter Property="IsEnabled" Value="True"/>
+							</MultiDataTrigger>
+						</Style.Triggers>
+					</Style>
+				</Button.Style>
+			</Button>
 			<Button Content="Abbrechen" Grid.Column="2" Margin="5, 0, 0, 0"/>
 		</Grid>
 	</StackPanel>

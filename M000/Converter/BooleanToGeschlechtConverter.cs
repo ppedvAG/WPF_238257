@@ -9,7 +9,8 @@ public class BooleanToGeschlechtConverter : IValueConverter
 {
 	public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 	{
-		return value;
+		//return (Geschlecht) value == (Geschlecht) parameter;
+		return false;
 	}
 
 	public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
