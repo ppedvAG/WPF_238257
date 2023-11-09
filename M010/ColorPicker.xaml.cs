@@ -33,15 +33,9 @@ public partial class ColorPicker : Window
 	/// Beispiel: Grid.Row, Grid.Column
 	/// Im Unterelement kann auf dieses Property zugegriffen werden
 	/// </summary>
-	public static int GetMax(DependencyObject obj)
-	{
-		return (int) obj.GetValue(MaxProperty);
-	}
+	public static int GetMax(DependencyObject obj) => (int) obj.GetValue(MaxProperty);
 
-	public static void SetMax(DependencyObject obj, int value)
-	{
-		obj.SetValue(MaxProperty, value);
-	}
+	public static void SetMax(DependencyObject obj, int value) => obj.SetValue(MaxProperty, value);
 
 	public static readonly DependencyProperty MaxProperty =
 		DependencyProperty.RegisterAttached("Max", typeof(int), typeof(ColorPicker));

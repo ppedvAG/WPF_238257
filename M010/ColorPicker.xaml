@@ -14,7 +14,7 @@
 		<!--"Eigene" UI Elemente definieren-->
 		<!--Auf Elemente innerhalb eines UserControls kann von außen nicht mehr zugegriffen werden-->
 		<!--Über Dependency Properties können Werte von innen nach außen weitergegeben werden-->
-		<local:SliderTextBox Text="R" Color="Red" x:Name="RSlider" SliderValueChanged="RSlider_SliderValueChanged"/>
+		<local:SliderTextBox Text="R" Color="Red" x:Name="RSlider" SliderValueChanged="RSlider_SliderValueChanged" local:ColorPicker.Max="200"/>
 		<local:SliderTextBox Text="G" Color="Green" x:Name="GSlider" local:ColorPicker.Max="200"/>
 		<local:SliderTextBox Text="B" Color="Blue" x:Name="BSlider"/>
 		<local:SliderTextBox Text="A" x:Name="ASlider"/>
