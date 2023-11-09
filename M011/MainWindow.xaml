@@ -1,0 +1,51 @@
+﻿<Window x:Class="M011.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:M011"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+		DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+	<!--RelativeSource Binding-->
+	<!--Ermöglicht das Binden an zur Editorzeit noch unbekannten Elementen-->
+	<!--Self Binding für DataContext-->
+	<Window.Resources>
+		<ControlTemplate TargetType="Button" x:Key="BtnTemplate">
+			<Border BorderBrush="Black" BorderThickness="2">
+				<StackPanel>
+					<!--Langform von TemplateBinding-->
+					<TextBlock Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content}"/>
+					
+					<!--Kurzform mithilfe von TemplateBinding-->
+					<TextBlock Text="{TemplateBinding Content}"/>
+				</StackPanel>
+			</Border>
+		</ControlTemplate>
+	</Window.Resources>
+	<StackPanel>
+		<!--Self Binding für Width immer gleich Height-->
+		<Rectangle Width="{Binding ElementName=DimensionSlider, Path=Value}"
+				   Height="{Binding RelativeSource={RelativeSource Self}, Path=Width}"
+				   Fill="Aqua"/>
+		<Slider Name="DimensionSlider" Minimum="100" Maximum="500"/>
+
+		<StackPanel>
+			<StackPanel.DataContext>
+				<local:Person/>
+			</StackPanel.DataContext>
+			<!--Dieser TextBlock soll wieder den Originalen DataContext (vom Window) bekommen-->
+			<!--Window: Self, StackPanel: Person, TextBlock soll dynamisch den DataContext von Window wieder übernehmen-->
+			<!--Verwendung: In UserControls ist zur Editorzeit nicht klar, was der übergreifende DataContext sein wird-->
+			<TextBlock DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext}"/>
+		</StackPanel>
+
+		<ListBox Height="50">
+			<ListBox.Items>
+				<ListBoxItem Content="Ein Content"/>
+				<ListBoxItem Height="{Binding RelativeSource={RelativeSource Mode=PreviousData}, Path=Height}"/>
+				<ListBoxItem Height="{Binding RelativeSource={RelativeSource Mode=PreviousData}, Path=Height}"/>
+			</ListBox.Items>
+		</ListBox>
+	</StackPanel>
+</Window>
