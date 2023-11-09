@@ -23,13 +23,25 @@
 		<ObjectDataProvider x:Key="Odp_ColorsProperties" MethodName="GetProperties" ObjectInstance="{StaticResource Odp_Colors}"/>
 
 		<conv:StringToColorConverter x:Key="SCC"/>
-		<valid:DateRangeRule x:Key="DateRule"/>
-		<valid:ColorRule x:Key="ColRule" ValidatesOnTargetUpdated="True"/>
+
+		<!--#region Rule Collections -->
+		<local:ValidationRuleCollection x:Key="DateRules">
+			<valid:DateRangeRule ValidatesOnTargetUpdated="True"/>
+		</local:ValidationRuleCollection>
+		
+		<local:ValidationRuleCollection x:Key="ColorRules">
+			<valid:ColorRule ValidatesOnTargetUpdated="True"/>
+		</local:ValidationRuleCollection>
+
+		<local:ValidationRuleCollection x:Key="AmountRules">
+			<valid:PositiveAmountValidation ValidatesOnTargetUpdated="True"/>
+		</local:ValidationRuleCollection>
 
 		<local:ValidationRuleCollection x:Key="TextRules">
 			<valid:LengthRule ValidatesOnTargetUpdated="True"/>
 			<valid:LetterRule ValidatesOnTargetUpdated="True"/>
 		</local:ValidationRuleCollection>
+		<!--#endregion-->
 
 		<ControlTemplate x:Key="ErrorTemplate">
 			<StackPanel>
@@ -66,7 +78,7 @@
 		</UniformGrid>
 		<UniformGrid>
 			<TextBlock Text="Geburtsdatum: "/>
-			<DatePicker SelectedDate="{local:ValidationTest {Binding Current.GebDat, UpdateSourceTrigger=PropertyChanged}, {StaticResource DateRule}}"
+			<DatePicker SelectedDate="{local:ValidationMarkup {Binding Current.GebDat, UpdateSourceTrigger=PropertyChanged}, {StaticResource DateRules}}"
 						Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
 						Name="GebDatDP"/>
 		</UniformGrid>
@@ -76,7 +88,7 @@
 		</UniformGrid>
 		<UniformGrid>
 			<TextBlock Text="Lieblingsfarbe: "/>
-			<ComboBox SelectedValue="{local:ValidationTest {Binding Current.Lieblingsfarbe, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource SCC}}, {StaticResource ColRule}}"
+			<ComboBox SelectedValue="{local:ValidationMarkup {Binding Current.Lieblingsfarbe, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource SCC}}, {StaticResource ColorRules}}"
 					  SelectedValuePath="Name"
 					  Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
 					  ItemsSource="{Binding Source={StaticResource Odp_ColorsProperties}}"
@@ -124,6 +136,12 @@
 			<RadioButton GroupName="G" Content="W" IsChecked="{Binding Current.Gender, Converter={StaticResource BG}, ConverterParameter={x:Static model:Geschlecht.W}}"/>
 			<RadioButton GroupName="G" Content="D" IsChecked="{Binding Current.Gender, Converter={StaticResource BG}, ConverterParameter={x:Static model:Geschlecht.D}}"/>-->
 		</UniformGrid>
+		<UniformGrid>
+			<TextBlock Text="Anzahl Kinder: "/>
+			<local:IntCounter Count="{local:ValidationMarkup {Binding Current.AnzKinder, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}, {StaticResource AmountRules}}"
+							  Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
+							  x:Name="KinderIC"/>
+		</UniformGrid>
 		<Grid Margin="0, 0, 0, 5">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="50"/>
@@ -142,6 +160,7 @@
 									<Condition Binding="{Binding ElementName=NachnameTB, Path=(Validation.HasError)}" Value="False"/>
 									<Condition Binding="{Binding ElementName=GebDatDP, Path=(Validation.HasError)}" Value="False"/>
 									<Condition Binding="{Binding ElementName=FarbeCB, Path=(Validation.HasError)}" Value="False"/>
+									<Condition Binding="{Binding ElementName=KinderIC, Path=(Validation.HasError)}" Value="False"/>
 								</MultiDataTrigger.Conditions>
 								<Setter Property="IsEnabled" Value="True"/>
 							</MultiDataTrigger>
