@@ -7,23 +7,31 @@
 	<UserControl.Resources>
 		<conv:ColorToBrushConverter x:Key="CBC"/>
 	</UserControl.Resources>
-	<Border BorderBrush="{Binding ElementName=Self, Path=Color, Converter={StaticResource CBC}}" BorderThickness="2" Margin="0, 0, 0, 5" Padding="3">
+	<Border BorderBrush="{Binding ElementName=Self, Path=Color, Converter={StaticResource CBC}}"
+			BorderThickness="2"
+			Margin="0, 0, 0, 5"
+			Padding="3">
 		<Grid>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="30"/>
 				<ColumnDefinition/>
 				<ColumnDefinition Width="50"/>
 			</Grid.ColumnDefinitions>
-			<TextBlock Text="{Binding ElementName=Self, Path=Text, StringFormat=' {0}:'}" Foreground="{Binding Color, Converter={StaticResource CBC}}" TextAlignment="Center"/>
+			<TextBlock Text="{Binding ElementName=Self, Path=Text, StringFormat=' {0}:'}"
+					   Foreground="{Binding ElementName=Self, Path=Color, Converter={StaticResource CBC}}"
+					   TextAlignment="Center"/>
 			<Slider Grid.Column="1"
+					Name="ColorSlider"
+					VerticalAlignment="Center"
+					Margin="0, 0, 5, 0"
+					
 					TickFrequency="1"
+					IsSnapToTickEnabled="True"
 					Minimum="0"
 					Maximum="{Binding ElementName=Self, Path=Max.Value}"
-					IsSnapToTickEnabled="True"
-					Name="ColorSlider"
-					Value="{Binding ElementName=Self, Path=SliderValue}"
-					VerticalAlignment="Center"/>
-			<TextBox Grid.Column="2" Text="{Binding ElementName=ColorSlider,Path=Value}"/>
+					Value="{Binding ElementName=Self, Path=SliderValue}"/>
+			<TextBox Grid.Column="2"
+					 Text="{Binding ElementName=ColorSlider, Path=Value}"/>
 		</Grid>
 	</Border>
 </UserControl>

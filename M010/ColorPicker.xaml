@@ -3,23 +3,25 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:conv="clr-namespace:M010.Converter"
 		xmlns:local="clr-namespace:M010"
+		xmlns:sys="clr-namespace:System;assembly=System.Runtime"
 		WindowStartupLocation="CenterScreen"
 		ResizeMode="NoResize"
 		FontSize="18"
 		Topmost="True"
 		SizeToContent="Height"
         Title="ColorPicker" Height="450" Width="450">
-    <StackPanel Margin="10, 0, 10, 10">
+	<StackPanel Margin="10, 0, 10, 10">
 		<!--UserControls-->
 		<!--"Eigene" UI Elemente definieren-->
 		<!--Auf Elemente innerhalb eines UserControls kann von außen nicht mehr zugegriffen werden-->
 		<!--Über Dependency Properties können Werte von innen nach außen weitergegeben werden-->
 		<local:SliderTextBox Text="R" Color="Red" x:Name="RSlider" SliderValueChanged="RSlider_SliderValueChanged" local:ColorPicker.Max="200"/>
-		<local:SliderTextBox Text="G" Color="Green" x:Name="GSlider" local:ColorPicker.Max="200"/>
+		<local:SliderTextBox Text="G" Color="Green" x:Name="GSlider"/>
 		<local:SliderTextBox Text="B" Color="Blue" x:Name="BSlider"/>
 		<local:SliderTextBox Text="A" x:Name="ASlider"/>
 		<TextBlock Text="{Binding ElementName=Col, Path=Fill, StringFormat='Picked color: {0}'}"
-				   TextAlignment="Center"/>
+				   TextAlignment="Center"
+				   Margin="5"/>
 		<Border BorderBrush="Black" BorderThickness="2" Width="100" Height="100">
 			<Rectangle Width="100" Height="100" Name="Col">
 				<Rectangle.Fill>
