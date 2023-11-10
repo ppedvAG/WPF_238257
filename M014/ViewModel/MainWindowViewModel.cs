@@ -29,19 +29,12 @@ public class MainWindowViewModel : ViewModelBase
     {
 		BeendenCommand = new CustomCommand((p) => (p as Window).Close(), (p) => true);
 		NavigatePageCommand = new CustomCommand(NavigatePage, (p) => true);
-		CurrentPage = new MainPage();
+		CurrentPage = new MainPageViewModel();
     }
 
 	public void NavigatePage(object page)
 	{
-		if (page is string str)
-		{
-			Type newPage = Assembly.GetExecutingAssembly()
-								   .GetTypes()
-								   .Where(e => e.GetInterface(nameof(IPage)) != null)
-								   .First(e => e.Name == str);
-
-			CurrentPage = Activator.CreateInstance(newPage) as IPage;
-		}
+		if (page is Type t)
+			CurrentPage = Activator.CreateInstance(t) as IPage;
 	}
 }

@@ -1,0 +1,30 @@
+﻿<Window x:Class="M015.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:M015"
+        Title="MainWindow" Height="450" Width="800"
+		DataContext="{Binding RelativeSource={RelativeSource Self}}"
+		WindowStartupLocation="CenterScreen">
+	<StackPanel>
+		<Button Content="LoadData" Click="Button_Click"/>
+		<ProgressBar IsIndeterminate="True" Height="20"/>
+		<ProgressBar Height="20" Name="Progress" Minimum="0"/>
+		<TextBlock Name="Status"/>
+		<Rectangle Fill="Aqua" Width="100" Height="{Binding RelativeSource={RelativeSource Self}, Path=Width}">
+			<Rectangle.Style>
+				<Style TargetType="Rectangle">
+					<Style.Triggers>
+						<EventTrigger RoutedEvent="MouseDown">
+							<BeginStoryboard>
+								<!--Storyboard ist die Grundlegende Komponente für Animationen-->
+								<Storyboard>
+									<DoubleAnimation From="100" To="500" Duration="0:0:5" Storyboard.TargetProperty="(Width)" AutoReverse="True"/>
+								</Storyboard>
+							</BeginStoryboard>
+						</EventTrigger>
+					</Style.Triggers>
+				</Style>
+			</Rectangle.Style>
+		</Rectangle>
+	</StackPanel>
+</Window>
