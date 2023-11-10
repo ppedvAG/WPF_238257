@@ -1,0 +1,38 @@
+﻿<Window x:Class="M012.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:M012"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+		WindowStartupLocation="CenterScreen"
+		DataContext="{Binding RelativeSource={RelativeSource Self}}">
+	<!--Command-->
+	<!--Bei MVVM werden UI und Logik strikt getrennt -> Events nicht mehr möglich sind, weil Events im Backend Code sind-->
+	<!--Bei Commands wird die Logik in einer eigenen Klasse abgelegt, die dann an die UI angebunden wird-->
+    <StackPanel>
+		<TextBox x:Name="TB" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"/>
+		<!--Command bei Button bezieht sich auf das Click Event-->
+		<!--Über den CommandParameter kann ein Command ein Argument erhalten-->
+		<Button Command="{Binding Delete}"
+				CommandParameter="{Binding ElementName=TB}"
+				Content="Test"
+				IsEnabled="{Binding TextBoxDeleteCanExecute}">
+		</Button>
+		
+		<!--InputBindings-->
+		<!--Über InputBindings können auch andere Events (z.B. Key-/Mouse Events) angebunden werden via commands-->
+		
+		<!--Wenn Enter gedrückt wird, soll der Text aus der TextBox in den TextBlock übertragen werden-->
+		<TextBox x:Name="EnterBox">
+			<TextBox.InputBindings>
+				<KeyBinding Key="Return"
+							Command="{Binding EnterCommand}"
+							CommandParameter="{Binding ElementName=EnterBox}"
+							CommandTarget="{Binding ElementName=EnterBox}"/>
+			</TextBox.InputBindings>
+		</TextBox>	
+		<TextBlock Name="Output"/>
+	</StackPanel>
+</Window>

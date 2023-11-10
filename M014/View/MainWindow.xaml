@@ -1,0 +1,39 @@
+﻿<Window x:Class="M014.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:vm="clr-namespace:M014.ViewModel"
+        xmlns:local="clr-namespace:M014"
+        Title="{Binding CurrentPage.Title}"
+		WindowStartupLocation="CenterScreen"
+		Name="Self">
+	<Window.DataContext>
+		<vm:MainWindowViewModel/>
+	</Window.DataContext>
+    <!--Page basiertes Layout-->
+	<!--alá Web Design: Buttons zur Navigation, aller Inhalt von der Webseite ist im selben Fenster-->
+	<!--Hier im MainWindow liegt der Aufbau der Applikation (Menü, Buttons, ...)-->
+	<!--Andere Pages die hier eingebunden werden-->
+	<DockPanel LastChildFill="True">
+		<!--Menüleiste oben-->
+		<Menu DockPanel.Dock="Top">
+			<MenuItem Header="Datei">
+				<MenuItem Header="Beenden" Command="{Binding BeendenCommand}" CommandParameter="{Binding ElementName=Self}"/>
+			</MenuItem>
+		</Menu>
+		<!--Navigationsleiste links-->
+		<StackPanel DockPanel.Dock="Left" MinWidth="200" Margin="0, 5, 0, 0">
+			<StackPanel.Resources>
+				<Style TargetType="Button">
+					<Setter Property="Margin" Value="0, 0, 0, 5"/>
+					<Setter Property="Command" Value="{Binding NavigatePageCommand}"/>
+					<Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"/>
+				</Style>
+			</StackPanel.Resources>
+			<Button Content="Page1" Tag="MainPage"/>
+			<Button Content="Page2" Tag="SecondPage"/>
+			<Button Content="Page3"/>
+		</StackPanel>
+		<!--Die Page in der Mitte-->
+		<ContentControl Content="{Binding CurrentPage}" Margin="5"/>
+	</DockPanel>
+</Window>

@@ -1,0 +1,42 @@
+﻿<Window x:Class="M013.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:vm="clr-namespace:M013.ViewModel"
+        xmlns:local="clr-namespace:M013"
+        Title="MainWindow"
+		Height="450"
+		Width="800"
+		WindowStartupLocation="CenterScreen">
+	<Window.DataContext>
+		<vm:MainWindowViewModel/>
+	</Window.DataContext>
+	<!--MVVM-->
+	<!--Strikte Trennung der Applikation in Model, View, ViewModel-->
+	<!--Model: Datenklassen-->
+	<!--View: Benutzeroberfläche-->
+	<!--ViewModel: Das Verbindungsstück zwischen Model und View, enthält den Großteil der Logik-->
+	
+	<!--Beispiel: 3 verschiedene Benutzeroberflächen (Desktop UI, Webseite, Mobile App)-->
+	<!--Projektstruktur:-->
+	<!--> Projekt.Model-->
+	<!--> Projekt.ViewModel-->
+	<!--> Projekt.WPF-->
+	<!--> Projekt.ASP-->
+	<!--> Projekt.MAUI-->
+	
+	<!--ViewModels sind ganz normale C# Klassen die den DataContext der View darstellen-->
+    <StackPanel>
+		<ListBox ItemsSource="{Binding Personen}">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="{Binding ID, StringFormat='ID: {0}, '}"/>
+						<TextBlock Text="{Binding Vorname, StringFormat='Vorname: {0}, '}"/>
+						<TextBlock Text="{Binding Nachname, StringFormat='Nachname: {0}'}"/>
+					</StackPanel>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+		<Button Content="Person erzeugen" Command="{Binding CreatePersonCommand}"/>
+	</StackPanel>
+</Window>
